@@ -404,66 +404,6 @@ void athlete_progress_linear(const Athlete *athlete, const char *event) {
     free(dates);
 }
 
-/**
- * read_performances - Reads performance data for a specific athlete from a file.
- *
- * This function reads the performance data of a given athlete from their file in the DATA_DIR directory.
- * The data is stored in the athlete's performance array. If the file does not exist, an error message is printed.
- * The performances are dynamically allocated and resized as needed. After reading, the performances are sorted by date.
- */
-void read_performances(const char* athlete_name, Athlete *athlete) {
-    char file_path[256]; // Buffer to hold the file path
-
-    // Create the file path in the format "DATA_DIR/athlete_name.txt"
-    snprintf(file_path, sizeof(file_path), "%s/%s.txt", DATA_DIR, athlete_name);
-
-    // Open the file for reading
-    FILE *file = fopen(file_path, "r");
-    if (file == NULL) {
-        // If the file cannot be opened, print an error message
-        fprintf(stderr, "No file found for athlete %s\n", athlete_name);
-        return;
-    }
-
-    char line[MAX_LINE_LENGTH]; // Buffer to hold each line of the file
-    athlete->count = 0; // Initialize the count of performances
-    athlete->capacity = INITIAL_PERFORMANCES; // Initialize the capacity of the performance array
-    athlete->performances = (Performance *)malloc(athlete->capacity * sizeof(Performance)); // Allocate memory for performances
-
-    // Read each line from the file
-    while (fgets(line, sizeof(line), file)) {
-        // If the performance array is full, double its capacity
-        if (athlete->count >= athlete->capacity) {
-            athlete->capacity *= 2;
-            athlete->performances = (Performance *)realloc(athlete->performances, athlete->capacity * sizeof(Performance));
-        }
-
-        // Tokenize the line to extract date, event, time, and position
-        char *date = strtok(line, ";");
-        char *event = strtok(NULL, ";");
-        char *time = strtok(NULL, ";");
-        char *position = strtok(NULL, "\n");
-
-        // If date, event, and time are present, store the performance data
-        if (date && event && time) {
-            strcpy(athlete->performances[athlete->count].date, date);
-            strcpy(athlete->performances[athlete->count].event, event);
-            strcpy(athlete->performances[athlete->count].time, time);
-            athlete->performances[athlete->count].position = position ? atoi(position) : 0; // Convert position to integer if present
-            athlete->count++; // Increment the count of performances
-        }
-    }
-
-    // Close the file after reading all data
-    fclose(file);
-
-    // Set the athlete's name
-    strcpy(athlete->name, athlete_name);
-
-    // Sort performances by date using qsort and compare_dates function
-    qsort(athlete->performances, athlete->count, sizeof(Performance), compare_dates);
-}
-
 
 int is_valid_date(const char *date) { // check date has the right format
     if (strlen(date) != 10) return 0;
