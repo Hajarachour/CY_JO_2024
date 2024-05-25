@@ -182,7 +182,7 @@ void athlete_progress_linear(const Athlete *athlete, const char *event) { // Per
         printf("Regression Line: y = %.2f * x + %.2f\n", slope, intercept);
 
         char output_file[256];
-        snprintf(output_file, sizeof(output_file), "%s_%s_performance.png", athlete->name, event);
+        snprintf(output_file, sizeof(output_file), "performance/%s_%s_performance.png", athlete->name, event);
 
         // Plot using gnuplot
         FILE *gnuplotPipe = popen("gnuplot -persistent", "w");
