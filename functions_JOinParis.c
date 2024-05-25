@@ -56,15 +56,34 @@ void create_initial_athletes() { // Create initial data for a set of athletes
 
     create_athlete_file("Dimittri");
     add_performance("Dimittri", "2024-04-13", "400m", "234", 0);
+    add_performance("Dimittri, "2024-10-03", "400m", "100", 0);
+    add_performance("Dimittri, "2024-07-10", "400m", "419", 0);
+    add_performance("Dimittri, "2024-09-23", "400m", "210", 0);
+    
 
     create_athlete_file("Hajar");
-    add_performance("Hajar", "2024-01-28", "marathon", "7800", 0);
+    add_performance("Hajar", "2024-01-28", "marathon", "1800", 0);
+    add_performance("Hajar", "2024-01-25", "marathon", "1900", 0);
+    add_performance("Hajar", "2024-01-18", "marathon", "2100", 0);
+    add_performance("Hajar", "2024-01-26", "marathon", "3800", 0);
+
+    create_athlete_file("Hamed");
+    add_performance("Hamed", "2024-04-18", "5000m", "780", 0);
+    add_performance("Hamed", "2024-05-18", "5000m", "740", 0);
+    add_performance("Hamed", "2024-02-18", "5000m", "717", 0);
+    add_performance("Hamed", "2024-11-18", "5000m", "700", 0);
 
     create_athlete_file("Hamza");
-    add_performance("Hamza", "2024-01-28", "marathon", "5400", 0);
+    add_performance("Hamza", "2024-01-25", "marathon", "5600", 0);
+    add_performance("Hamza", "2024-01-28", "marathon", "5390", 0);
+    add_performance("Hamza", "2024-01-21", "marathon", "5350", 0);
+    add_performance("Hamza", "2024-03-15", "marathon", "5300", 0);
 
     create_athlete_file("Haarise");
-    add_performance("Haarise", "2024-01-28", "marathon", "5100", 0);
+    add_performance("Haarise", "2024-01-21", "marathon", "5300", 0);
+    add_performance("Haarise", "2024-01-20", "marathon", "5250", 0);
+    add_performance("Haarise", "2024-01-27", "marathon", "5100", 0);
+    add_performance("Haarise", "2023-12-28", "marathon", "5170", 0);
 
     create_athlete_file("Simon");
     add_performance("Simon", "2022-03-23", "400m", "53.2", 0);
