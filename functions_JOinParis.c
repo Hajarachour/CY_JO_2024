@@ -1,7 +1,7 @@
 #include "functions_JOinParis.h"
 #include "imports_and_variables_JOinParis.h"
 
-void create_data_dir() {
+void create_data_dir() { // Create a directory named DATA_DIR if it does not exist
     struct stat st = {0};
     if (stat(DATA_DIR, &st) == -1) {
         if (mkdir(DATA_DIR, 0700) != 0) {
@@ -11,7 +11,7 @@ void create_data_dir() {
     }
 }
 
-void create_athlete_file(const char* athlete_name) {
+void create_athlete_file(const char* athlete_name) { // Create a file for a specific athlete
     char file_path[256];
     snprintf(file_path, sizeof(file_path), "%s/%s.txt", DATA_DIR, athlete_name);
 
@@ -25,7 +25,8 @@ void create_athlete_file(const char* athlete_name) {
     printf("File created for athlete %s\n", athlete_name);
 }
 
-void add_performance(const char* athlete_name, const char* date, const char* event, const char* time, int position) {
+void add_performance(const char* athlete_name, const char* date, const char* event, const char* time, int position) { // Add performance data for a specific athlete
+
     char file_path[256];
     snprintf(file_path, sizeof(file_path), "%s/%s.txt", DATA_DIR, athlete_name);
 
@@ -44,7 +45,7 @@ void add_performance(const char* athlete_name, const char* date, const char* eve
     fclose(file);
 }
 
-void create_initial_athletes() {
+void create_initial_athletes() { // Create initial data for a set of athletes
     create_data_dir();
 
     create_athlete_file("Sanem");
@@ -71,7 +72,7 @@ void create_initial_athletes() {
     printf("Initial athletes created and performances added.\n");
 }
 
-void read_performances(const char* athlete_name, Athlete *athlete) { // Lire les performances
+void read_performances(const char* athlete_name, Athlete *athlete) { // Read performances from the file of a specific athlete and store them in the Athlete struct
     char file_path[256];
     snprintf(file_path, sizeof(file_path), "%s/%s.txt", DATA_DIR, athlete_name);
 
@@ -110,7 +111,7 @@ void read_performances(const char* athlete_name, Athlete *athlete) { // Lire les
     strcpy(athlete->name, athlete_name); // Set the athlete's name
 }
 
-void display_history(const Athlete *athlete) {
+void display_history(const Athlete *athlete) { // Display the performance history of a specific athlete
     for (int i = 0; i < athlete->count; i++) {
         printf("Date: %s, Event: %s, Time: %s", athlete->performances[i].date, athlete->performances[i].event, athlete->performances[i].time);
         if (strcmp(athlete->performances[i].event, "4x400m") == 0) {
@@ -120,7 +121,7 @@ void display_history(const Athlete *athlete) {
     }
 }
 
-void athlete_statistics(const Athlete *athlete, const char *event) {
+void athlete_statistics(const Athlete *athlete, const char *event) { // Calculate and display statistics for a specific event of an athlete
     float best_time = 9999.0;
     float worst_time = 0.0;
     float total_time = 0.0;
@@ -146,7 +147,7 @@ void athlete_statistics(const Athlete *athlete, const char *event) {
     }
 }
 
-void athlete_progress_linear(const Athlete *athlete, const char *event) {
+void athlete_progress_linear(const Athlete *athlete, const char *event) { // Perform linear regression on the performance data of a specific event and plot the results
     int n = 0;
     float sum_x = 0.0, sum_y = 0.0, sum_xx = 0.0, sum_xy = 0.0;
     float *times = NULL;
@@ -219,7 +220,7 @@ void athlete_progress_linear(const Athlete *athlete, const char *event) {
     free(dates);
 }
 
-void athlete_progress_dates(const Athlete *athlete, const char *event, const char *date1, const char *date2) {
+void athlete_progress_dates(const Athlete *athlete, const char *event, const char *date1, const char *date2) { // Calculates and displays an athlete's progress for a specific event between two dates
     float time1 = -1.0;
     float time2 = -1.0;
 
@@ -241,7 +242,7 @@ void athlete_progress_dates(const Athlete *athlete, const char *event, const cha
     }
 }
 
-int is_valid_date(const char *date) {
+int is_valid_date(const char *date) { // Checks if the given date string is valid
     if (strlen(date) != 10) return 0;
     if (date[4] != '-' || date[7] != '-') return 0;
     for (int i = 0; i < 10; i++) {
@@ -270,7 +271,7 @@ int is_valid_date(const char *date) {
     return 1;
 }
 
-void prompt_date(char *date) {
+void prompt_date(char *date) { // Prompts the user to enter a date and validates it
     while (1) {
         printf("Enter date (YYYY-MM-DD): ");
         if (scanf("%10s", date) == 1 && is_valid_date(date)) {
@@ -281,7 +282,7 @@ void prompt_date(char *date) {
     }
 }
 
-int check_exiting_relais_for_date(const char *athlete_name, char *date_event) {
+int check_exiting_relais_for_date(const char *athlete_name, char *date_event) { // Checks if a relay event exists for the given athlete on the specified date
     char file_path[256];
     snprintf(file_path, sizeof(file_path), "%s/%s.txt", DATA_DIR, athlete_name);
 
@@ -314,7 +315,7 @@ int check_exiting_relais_for_date(const char *athlete_name, char *date_event) {
     return 0;
 }
 
-int is_valid_sport(const char *sport) {
+int is_valid_sport(const char *sport) { // Checks if the given sport event is valid
     for (int i = 0; i < numValidSports; i++) {
         if (strcmp(sport, validSports[i]) == 0) {
             return 1;
@@ -323,7 +324,7 @@ int is_valid_sport(const char *sport) {
     return 0;
 }
 
-void prompt_sport(char *sport) {
+void prompt_sport(char *sport) { // Prompts the user to enter a sport event and validates it
     while (1) {
         printf("Enter event (valid options: 100m, 400m, 5000m, marathon, 4x400m): ");
         if (scanf("%49s", sport) == 1 && is_valid_sport(sport)) {
@@ -334,11 +335,11 @@ void prompt_sport(char *sport) {
     }
 }
 
-int is_valid_position(int position) {
+int is_valid_position(int position) { // Checks if the given position is valid (1-4)
     return position >= 1 && position <= 4;
 }
 
-void prompt_position(int *position) {
+void prompt_position(int *position) { // Prompts the user to enter a position and validates it
     while (1) {
         printf("Enter position (1, 2, 3, 4): ");
         if (scanf("%d", position) == 1 && is_valid_position(*position)) {
@@ -349,12 +350,12 @@ void prompt_position(int *position) {
     }
 }
 
-typedef struct {
+typedef struct { // Structure to hold athlete performance data
     char name[50];
     float time;
 } AthletePerformance;
 
-int compare_performance(const void *a, const void *b) {
+int compare_performance(const void *a, const void *b) { // Comparison function for sorting performances by time
     AthletePerformance *ap1 = (AthletePerformance *)a;
     AthletePerformance *ap2 = (AthletePerformance *)b;
     if (ap1->time < ap2->time) return -1;
@@ -362,7 +363,7 @@ int compare_performance(const void *a, const void *b) {
     return 0;
 }
 
-void find_top_athletes(const char *event) {
+void find_top_athletes(const char *event) { // Finds and displays the top 3 athletes for a specific event
     DIR *dir;
     struct dirent *entry;
     AthletePerformance *all_performances = NULL;
