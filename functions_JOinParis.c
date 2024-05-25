@@ -621,3 +621,77 @@ void athlete_progress_dates(const Athlete *athlete, const char *event, const cha
         printf("Times not found for one of the specified dates.\n");
     }
 }
+
+/**
+ * find_top_athletes - Finds and displays the top 3 athletes for a specific event.
+ *
+ * This function searches through all athlete files in the DATA_DIR directory,
+ * reads their performances for a specified event, and determines the top 3 performances.
+ * If less than 3 performances are found, it displays the available top performances.
+ * If no performances are found for the event, it prints an appropriate message.
+ */
+void find_top_athletes(const char *event) {
+    DIR *dir; // Pointer for the directory
+    struct dirent *entry; // Structure to hold directory entries
+    AthletePerformance *all_performances = NULL; // Array to hold all performances for the event
+    int total_performances = 0; // Counter for the total number of performances
+
+    // Open the data directory
+    if ((dir = opendir(DATA_DIR)) == NULL) {
+        perror("opendir"); // Print an error message if the directory cannot be opened
+        return;
+    }
+
+    // Read each entry in the directory
+    while ((entry = readdir(dir)) != NULL) {
+        if (entry->d_type == DT_REG) { // Check if the entry is a regular file
+            Athlete athlete;
+            char athlete_name[50];
+            strncpy(athlete_name, entry->d_name, sizeof(athlete_name)); // Copy the file name
+            athlete_name[strcspn(athlete_name, ".")] = '\0'; // Remove the file extension
+            read_performances(athlete_name, &athlete); // Read the athlete's performances
+
+            // Check each performance for the specified event
+            for (int i = 0; i < athlete.count; i++) {
+                if (strcmp(athlete.performances[i].event, event) == 0) {
+                    total_performances++;
+                    all_performances = realloc(all_performances, total_performances * sizeof(AthletePerformance));
+                    strncpy(all_performances[total_performances - 1].name, athlete.name, sizeof(all_performances[total_performances - 1].name));
+                    all_performances[total_performances - 1].time = atof(athlete.performances[i].time);
+                }
+            }
+
+            // Free allocated memory for the athlete's performances
+            free(athlete.performances);
+        }
+    }
+    closedir(dir); // Close the directory
+
+    // If there are performances, sort and display the top 3
+    if (total_performances > 0) {
+        qsort(all_performances, total_performances, sizeof(AthletePerformance), compare_performance);
+
+        int num_athletes = total_performances < 3 ? total_performances : 3; // Determine the number of top athletes to display
+        printf("Top %d athletes for event %s:\n", num_athletes, event);
+        for (int i = 0; i < num_athletes; i++) {
+            printf("%d. %s - Time: %.2f\n", i + 1, all_performances[i].name, all_performances[i].time);
+        }
+
+        // Congratulate the top athletes
+        if (num_athletes == 3) {
+            printf("Congratulations to %s, %s, and %s! You are going to the Olympics!\n",
+                all_performances[0].name, all_performances[1].name, all_performances[2].name);
+        } else if (num_athletes == 2) {
+            printf("Congratulations to %s and %s! You are going to the Olympics!\n",
+                all_performances[0].name, all_performances[1].name);
+        } else if (num_athletes == 1) {
+            printf("Congratulations to %s! You are going to the Olympics!\n",
+                all_performances[0].name);
+        }
+
+        // Free allocated memory for the performances
+        free(all_performances);
+    } else {
+        printf("No athletes found for event %s\n", event);
+    }
+}
