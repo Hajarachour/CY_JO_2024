@@ -56,9 +56,9 @@ void create_initial_athletes() { // Create initial data for a set of athletes
 
     create_athlete_file("Dimittri");
     add_performance("Dimittri", "2024-04-13", "400m", "234", 0);
-    add_performance("Dimittri, "2024-10-03", "400m", "100", 0);
-    add_performance("Dimittri, "2024-07-10", "400m", "419", 0);
-    add_performance("Dimittri, "2024-09-23", "400m", "210", 0);
+    add_performance("Dimittri", "2024-10-03", "400m", "100", 0);
+    add_performance("Dimittri", "2024-07-10", "400m", "419", 0);
+    add_performance("Dimittri", "2024-09-23", "400m", "210", 0);
     
 
     create_athlete_file("Hajar");
