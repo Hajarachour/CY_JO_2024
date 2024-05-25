@@ -1,20 +1,45 @@
 #include "functions_JOinParis.h"
 #include "imports_and_variables_JOinParis.h"
+#include <float.h>
 
-void create_data_dir() { // Create a directory named DATA_DIR if it does not exist
-    struct stat st = {0};
+
+/**
+ * create_data_dir - Creates a directory named DATA_DIR if it does not exist.
+ *
+ * This function checks if a directory defined by the macro DATA_DIR exists.
+ * If the directory does not exist, it attempts to create it with permissions set to 0700.
+ * If the directory creation fails, an error message is printed and the program exits with status 1.
+ */
+void create_data_dir() {
+    struct stat st = {0}; // Declare a stat structure to store information about the directory
+
+    // Check if the directory exists using stat() function
     if (stat(DATA_DIR, &st) == -1) {
+        // If the directory does not exist, create it with permissions 0700
         if (mkdir(DATA_DIR, 0700) != 0) {
+            // If the directory creation fails, print an error message and exit
             fprintf(stderr, "Error creating directory %s\n", DATA_DIR);
             exit(1);
         }
     }
 }
 
-void create_athlete_file(const char* athlete_name) { // Create a file for a specific athlete
-    char file_path[256];
+
+/**
+ * create_athlete_file - Creates a file for a specific athlete.
+ *
+ * This function creates a file in the DATA_DIR directory for the given athlete.
+ * The file will have the name format: athlete_name.txt.
+ * If the file cannot be created, an error message is printed.
+ * If the file is successfully created, a confirmation message is printed.
+ */
+void create_athlete_file(const char* athlete_name) {
+    char file_path[256]; // Buffer to hold the file path
+
+    // Create the file path in the format "DATA_DIR/athlete_name.txt"
     snprintf(file_path, sizeof(file_path), "%s/%s.txt", DATA_DIR, athlete_name);
 
+    // Open the file for writing (create it if it does not exist)
     FILE *file = fopen(file_path, "w");
     if (file == NULL) {
         fprintf(stderr, "Error creating file %s\n", file_path);
@@ -25,115 +50,232 @@ void create_athlete_file(const char* athlete_name) { // Create a file for a spec
     printf("File created for athlete %s\n", athlete_name);
 }
 
-void add_performance(const char* athlete_name, const char* date, const char* event, const char* time, int position) { // Add performance data for a specific athlete
 
-    char file_path[256];
+/**
+ * add_performance - Adds performance data for a specific athlete.
+ *
+ * This function appends performance data to the athlete's file located in the DATA_DIR directory.
+ * The performance data includes the date, event, time, and position (if applicable).
+ * If the event is "4x400m", the position is also included in the data.
+ * If the file cannot be opened, an error message is printed.
+ */
+void add_performance(const char* athlete_name, const char* date, const char* event, const char* time, int position) {
+    char file_path[256]; // Buffer to hold the file path
+
+    // Create the file path in the format "DATA_DIR/athlete_name.txt"
     snprintf(file_path, sizeof(file_path), "%s/%s.txt", DATA_DIR, athlete_name);
 
+    // Open the file for appending (add data to the end of the file)
     FILE *file = fopen(file_path, "a");
     if (file == NULL) {
         fprintf(stderr, "Error opening file %s\n", file_path);
         return;
     }
 
+    // Write performance data to the file
     if (strcmp(event, "4x400m") == 0) {
+        // If the event is "4x400m", include the position in the data
         fprintf(file, "%s;%s;%s;%d\n", date, event, time, position);
     } else {
+        // For other events, write the date, event, and time only
         fprintf(file, "%s;%s;%s\n", date, event, time);
     }
 
     fclose(file);
 }
 
+
 void create_initial_athletes() { // Create initial data for a set of athletes
     create_data_dir();
 
-    create_athlete_file("Sanem");
-    add_performance("Sanem", "2024-03-23", "100m", "13.2", 0);
-    add_performance("Sanem", "2024-05-23", "100m", "13.0", 0);
-    add_performance("Sanem", "2024-07-23", "100m", "12.9", 0);
-    add_performance("Sanem", "2024-09-23", "100m", "12.6", 0);
+    create_athlete_file("Robin");
+    add_performance("Robin", "2023-01-10", "100m", "13.5", 0);
+    add_performance("Robin", "2023-03-10", "100m", "13.2", 0);
+    add_performance("Robin", "2023-05-10", "100m", "13.0", 0);
+    add_performance("Robin", "2023-07-10", "100m", "12.8", 0);
+    add_performance("Robin", "2023-09-10", "100m", "12.5", 0);
+    add_performance("Robin", "2023-11-10", "400m", "53.5", 0);
+    add_performance("Robin", "2024-01-10", "400m", "52.5", 0);
+    add_performance("Robin", "2024-03-10", "400m", "51.0", 0);
+    add_performance("Robin", "2024-05-10", "400m", "50.0", 0);
+    add_performance("Robin", "2024-05-24", "400m", "49.0", 0);
+    add_performance("Robin", "2023-02-10", "marathon", "8200", 0);
+    add_performance("Robin", "2023-04-10", "marathon", "8100", 0);
+    add_performance("Robin", "2023-06-10", "marathon", "8000", 0);
+    add_performance("Robin", "2023-08-10", "marathon", "7900", 0);
+    add_performance("Robin", "2023-10-10", "marathon", "7800", 0);
 
     create_athlete_file("Dimittri");
-    add_performance("Dimittri", "2024-04-13", "400m", "234", 0);
-    add_performance("Dimittri", "2024-10-03", "400m", "100", 0);
-    add_performance("Dimittri", "2024-07-10", "400m", "419", 0);
-    add_performance("Dimittri", "2024-09-23", "400m", "210", 0);
-    
+    add_performance("Dimittri", "2023-01-15", "100m", "12.5", 0);
+    add_performance("Dimittri", "2023-03-15", "100m", "12.3", 0);
+    add_performance("Dimittri", "2023-05-15", "100m", "12.1", 0);
+    add_performance("Dimittri", "2023-07-15", "100m", "11.9", 0);
+    add_performance("Dimittri", "2023-09-15", "100m", "11.7", 0);
+    add_performance("Dimittri", "2023-02-15", "400m", "51.0", 0);
+    add_performance("Dimittri", "2023-04-15", "400m", "50.0", 0);
+    add_performance("Dimittri", "2023-06-15", "400m", "49.0", 0);
+    add_performance("Dimittri", "2023-08-15", "400m", "48.0", 0);
+    add_performance("Dimittri", "2023-10-15", "400m", "47.0", 0);
+    add_performance("Dimittri", "2023-11-15", "5000m", "780", 0);
+    add_performance("Dimittri", "2024-01-15", "5000m", "760", 0);
+    add_performance("Dimittri", "2024-03-15", "5000m", "740", 0);
+    add_performance("Dimittri", "2024-05-15", "5000m", "720", 0);
+    add_performance("Dimittri", "2024-05-24", "5000m", "700", 0);
 
-    create_athlete_file("Hajar");
-    add_performance("Hajar", "2024-01-28", "marathon", "1800", 0);
-    add_performance("Hajar", "2024-01-25", "marathon", "1900", 0);
-    add_performance("Hajar", "2024-01-18", "marathon", "2100", 0);
-    add_performance("Hajar", "2024-01-26", "marathon", "3800", 0);
+    create_athlete_file("Raphael");
+    add_performance("Raphael", "2023-01-20", "400m", "54.0", 0);
+    add_performance("Raphael", "2023-03-20", "400m", "53.0", 0);
+    add_performance("Raphael", "2023-05-20", "400m", "52.0", 0);
+    add_performance("Raphael", "2023-07-20", "400m", "51.0", 0);
+    add_performance("Raphael", "2023-09-20", "400m", "50.0", 0);
+    add_performance("Raphael", "2023-02-20", "marathon", "7800", 0);
+    add_performance("Raphael", "2023-04-20", "marathon", "7700", 0);
+    add_performance("Raphael", "2023-06-20", "marathon", "7600", 0);
+    add_performance("Raphael", "2023-08-20", "marathon", "7500", 0);
+    add_performance("Raphael", "2023-10-20", "marathon", "7400", 0);
+    add_performance("Raphael", "2023-11-20", "4x400m", "185", 1);
+    add_performance("Raphael", "2024-01-20", "4x400m", "180", 1);
+    add_performance("Raphael", "2024-03-20", "4x400m", "175", 1);
+    add_performance("Raphael", "2024-05-20", "4x400m", "170", 1);
+    add_performance("Raphael", "2024-05-24", "4x400m", "165", 1);
 
     create_athlete_file("Hamed");
-    add_performance("Hamed", "2024-04-18", "5000m", "780", 0);
-    add_performance("Hamed", "2024-05-18", "5000m", "740", 0);
-    add_performance("Hamed", "2024-02-18", "5000m", "717", 0);
-    add_performance("Hamed", "2024-11-18", "5000m", "700", 0);
+    add_performance("Hamed", "2023-01-25", "100m", "13.7", 0);
+    add_performance("Hamed", "2023-03-25", "100m", "13.5", 0);
+    add_performance("Hamed", "2023-05-25", "100m", "13.3", 0);
+    add_performance("Hamed", "2023-07-25", "100m", "13.0", 0);
+    add_performance("Hamed", "2023-09-25", "100m", "12.8", 0);
+    add_performance("Hamed", "2023-02-25", "400m", "52.0", 0);
+    add_performance("Hamed", "2023-04-25", "400m", "51.0", 0);
+    add_performance("Hamed", "2023-06-25", "400m", "50.0", 0);
+    add_performance("Hamed", "2023-08-25", "400m", "49.0", 0);
+    add_performance("Hamed", "2023-10-25", "400m", "48.0", 0);
+    add_performance("Hamed", "2023-11-25", "5000m", "800", 0);
+    add_performance("Hamed", "2024-01-25", "5000m", "780", 0);
+    add_performance("Hamed", "2024-03-25", "5000m", "760", 0);
+    add_performance("Hamed", "2024-05-25", "5000m", "740", 0);
+    add_performance("Hamed", "2024-05-25", "5000m", "720", 0);
 
     create_athlete_file("Hamza");
-    add_performance("Hamza", "2024-01-25", "marathon", "5600", 0);
-    add_performance("Hamza", "2024-01-28", "marathon", "5390", 0);
-    add_performance("Hamza", "2024-01-21", "marathon", "5350", 0);
-    add_performance("Hamza", "2024-03-15", "marathon", "5300", 0);
+    add_performance("Hamza", "2023-01-30", "100m", "12.9", 0);
+    add_performance("Hamza", "2023-03-30", "100m", "12.7", 0);
+    add_performance("Hamza", "2023-05-30", "100m", "12.5", 0);
+    add_performance("Hamza", "2023-07-30", "100m", "12.3", 0);
+    add_performance("Hamza", "2023-09-30", "100m", "12.1", 0);
+    add_performance("Hamza", "2023-02-30", "400m", "50.0", 0);
+    add_performance("Hamza", "2023-04-30", "400m", "49.0", 0);
+    add_performance("Hamza", "2023-06-30", "400m", "48.0", 0);
+    add_performance("Hamza", "2023-08-30", "400m", "47.0", 0);
+    add_performance("Hamza", "2023-10-30", "400m", "46.0", 0);
+    add_performance("Hamza", "2023-11-30", "marathon", "7500", 0);
+    add_performance("Hamza", "2024-01-30", "marathon", "7400", 0);
+    add_performance("Hamza", "2024-03-30", "marathon", "7300", 0);
+    add_performance("Hamza", "2024-05-30", "marathon", "7200", 0);
+    add_performance("Hamza", "2024-05-25", "marathon", "7100", 0);
 
     create_athlete_file("Haarise");
-    add_performance("Haarise", "2024-01-21", "marathon", "5300", 0);
-    add_performance("Haarise", "2024-01-20", "marathon", "5250", 0);
-    add_performance("Haarise", "2024-01-27", "marathon", "5100", 0);
-    add_performance("Haarise", "2023-12-28", "marathon", "5170", 0);
+    add_performance("Haarise", "2023-01-05", "100m", "13.8", 0);
+    add_performance("Haarise", "2023-03-05", "100m", "13.6", 0);
+    add_performance("Haarise", "2023-05-05", "100m", "13.4", 0);
+    add_performance("Haarise", "2023-07-05", "100m", "13.2", 0);
+    add_performance("Haarise", "2023-09-05", "100m", "13.0", 0);
+    add_performance("Haarise", "2023-02-05", "400m", "51.5", 0);
+    add_performance("Haarise", "2023-04-05", "400m", "50.5", 0);
+    add_performance("Haarise", "2023-06-05", "400m", "49.5", 0);
+    add_performance("Haarise", "2023-08-05", "400m", "48.5", 0);
+    add_performance("Haarise", "2023-10-05", "400m", "47.5", 0);
+    add_performance("Haarise", "2023-11-05", "5000m", "780", 0);
+    add_performance("Haarise", "2024-01-05", "5000m", "760", 0);
+    add_performance("Haarise", "2024-03-05", "5000m", "740", 0);
+    add_performance("Haarise", "2024-05-05", "5000m", "720", 0);
+    add_performance("Haarise", "2024-05-25", "5000m", "700", 0);
 
     create_athlete_file("Simon");
-    add_performance("Simon", "2022-03-23", "400m", "53.2", 0);
-    add_performance("Simon", "2022-06-23", "400m", "52.8", 0);
-    add_performance("Simon", "2023-03-23", "400m", "53.0", 0);
-    add_performance("Simon", "2023-06-23", "400m", "52.2", 0);
-    add_performance("Simon", "2023-09-23", "400m", "50.0", 0);
-    add_performance("Simon", "2024-01-23", "400m", "40.8", 0);
+    add_performance("Simon", "2023-01-10", "400m", "53.5", 0);
+    add_performance("Simon", "2023-03-10", "400m", "52.5", 0);
+    add_performance("Simon", "2023-05-10", "400m", "51.5", 0);
+    add_performance("Simon", "2023-07-10", "400m", "50.5", 0);
+    add_performance("Simon", "2023-09-10", "400m", "49.5", 0);
+    add_performance("Simon", "2023-02-10", "marathon", "7900", 0);
+    add_performance("Simon", "2023-04-10", "marathon", "7800", 0);
+    add_performance("Simon", "2023-06-10", "marathon", "7700", 0);
+    add_performance("Simon", "2023-08-10", "marathon", "7600", 0);
+    add_performance("Simon", "2023-10-10", "marathon", "7500", 0);
+    add_performance("Simon", "2023-11-10", "100m", "13.2", 0);
+    add_performance("Simon", "2024-01-10", "100m", "13.0", 0);
+    add_performance("Simon", "2024-03-10", "100m", "12.8", 0);
+    add_performance("Simon", "2024-05-10", "100m", "12.6", 0);
+    add_performance("Simon", "2024-05-25", "100m", "12.4", 0);
+
 
     printf("Initial athletes created and performances added.\n");
 }
 
-void read_performances(const char* athlete_name, Athlete *athlete) { // Read performances from the file of a specific athlete and store them in the Athlete struct
-    char file_path[256];
+int compare_dates(const void *a, const void *b) { // Compare two Performance structures based on their dates for the sort later
+    Performance *pa = (Performance *)a;
+    Performance *pb = (Performance *)b;
+    return strcmp(pa->date, pb->date);
+}
+
+/**
+ * read_performances - Reads performance data for a specific athlete from a file.
+ *
+ * This function reads the performance data from the athlete's file located in the DATA_DIR directory.
+ * It stores the performance data in the provided Athlete structure.
+ * If the file cannot be found, an error message is printed.
+ * The performances are sorted by date after reading.
+ */
+void read_performances(const char* athlete_name, Athlete *athlete) {
+    char file_path[256]; // Buffer to hold the file path
+
+    // Create the file path in the format "DATA_DIR/athlete_name.txt"
     snprintf(file_path, sizeof(file_path), "%s/%s.txt", DATA_DIR, athlete_name);
 
+    // Open the file for reading
     FILE *file = fopen(file_path, "r");
     if (file == NULL) {
         fprintf(stderr, "No file found for athlete %s\n", athlete_name);
         return;
     }
 
-    char line[MAX_LINE_LENGTH];
+    char line[MAX_LINE_LENGTH]; // Buffer to hold each line read from the file
     athlete->count = 0;
     athlete->capacity = INITIAL_PERFORMANCES;
-    athlete->performances = (Performance *)malloc(athlete->capacity * sizeof(Performance));
+    athlete->performances = (Performance *)malloc(athlete->capacity * sizeof(Performance)); // Allocate memory for the performances array
 
+    // Read each line from the file
     while (fgets(line, sizeof(line), file)) {
+        // If the performances array is full, double its capacity
         if (athlete->count >= athlete->capacity) {
             athlete->capacity *= 2;
             athlete->performances = (Performance *)realloc(athlete->performances, athlete->capacity * sizeof(Performance));
         }
 
+        // Parse the line to extract date, event, time, and position
         char *date = strtok(line, ";");
         char *event = strtok(NULL, ";");
         char *time = strtok(NULL, ";");
         char *position = strtok(NULL, "\n");
 
+        // If the required fields are present, store them in the performances array
         if (date && event && time) {
             strcpy(athlete->performances[athlete->count].date, date);
             strcpy(athlete->performances[athlete->count].event, event);
             strcpy(athlete->performances[athlete->count].time, time);
             athlete->performances[athlete->count].position = position ? atoi(position) : 0;
-            athlete->count++;
+            athlete->count++; // Increment the count of performances
         }
     }
 
+    // Close the file after reading
     fclose(file);
-    strcpy(athlete->name, athlete_name); // Set the athlete's name
+    // Set the athlete's name
+    strcpy(athlete->name, athlete_name);
+
+    // Sort the performances by date
+    qsort(athlete->performances, athlete->count, sizeof(Performance), compare_dates);
 }
+
 
 void display_history(const Athlete *athlete) { // Display the performance history of a specific athlete
     for (int i = 0; i < athlete->count; i++) {
@@ -171,12 +313,17 @@ void athlete_statistics(const Athlete *athlete, const char *event) { // Calculat
     }
 }
 
-void athlete_progress_linear(const Athlete *athlete, const char *event) { // Perform linear regression on the performance data of a specific event and plot the results
+void athlete_progress_linear(const Athlete *athlete, const char *event) {
+    // Initialize variables for linear regression calculation
     int n = 0;
     float sum_x = 0.0, sum_y = 0.0, sum_xx = 0.0, sum_xy = 0.0;
     float *times = NULL;
     char **dates = NULL;
 
+    // Initialize variables to find min and max times
+    float min_time = FLT_MAX, max_time = FLT_MIN;
+
+    // Loop through athlete's performances to collect data
     for (int i = 0; i < athlete->count; i++) {
         if (strcmp(athlete->performances[i].event, event) == 0) {
             float time = atof(athlete->performances[i].time);
@@ -184,15 +331,19 @@ void athlete_progress_linear(const Athlete *athlete, const char *event) { // Per
             dates = realloc(dates, (n + 1) * sizeof(char *));
             times[n] = time;
             dates[n] = strdup(athlete->performances[i].date);
-            sum_x += n;
-            sum_y += time;
-            sum_xx += n * n;
-            sum_xy += n * time;
+            sum_x += n;            // x is the index (0, 1, 2, ...)
+            sum_y += time;         // y is the performance time
+            sum_xx += n * n;       // x^2
+            sum_xy += n * time;    // x*y
+            if (time < min_time) min_time = time;
+            if (time > max_time) max_time = time;
             n++;
         }
     }
 
+    // Calculate regression line only if there are enough data points
     if (n > 0) {
+        // Calculate slope (m) and intercept (b)
         float slope = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x);
         float intercept = (sum_y - slope * sum_x) / n;
 
@@ -200,8 +351,13 @@ void athlete_progress_linear(const Athlete *athlete, const char *event) { // Per
         printf("Number of performances: %d\n", n);
         printf("Regression Line: y = %.2f * x + %.2f\n", slope, intercept);
 
+        // Generate the output file name for the plot
         char output_file[256];
-        snprintf(output_file, sizeof(output_file), "performance/%s_%s_performance.png", athlete->name, event);
+        snprintf(output_file, sizeof(output_file), "%s_%s_performance.png", athlete->name, event);
+
+        // Calculate the y-axis range for the plot
+        float y_min = min_time * 0.9;
+        float y_max = max_time * 1.1;
 
         // Plot using gnuplot
         FILE *gnuplotPipe = popen("gnuplot -persistent", "w");
@@ -215,15 +371,18 @@ void athlete_progress_linear(const Athlete *athlete, const char *event) { // Per
             fprintf(gnuplotPipe, "set timefmt '%%Y-%%m-%%d'\n");
             fprintf(gnuplotPipe, "set format x '%%Y-%%m-%%d'\n");
             fprintf(gnuplotPipe, "set xtics rotate by -45\n");
+            fprintf(gnuplotPipe, "set yrange [%f:%f]\n", y_min, y_max);  // Set y-axis range
             fprintf(gnuplotPipe, "set pointsize 2\n"); // Set point size
             fprintf(gnuplotPipe, "set style line 1 lw 2\n"); // Set line width
             fprintf(gnuplotPipe, "plot '-' using 1:2 with points title 'Performance' pointtype 7, '-' using 1:2 with lines title 'Trend' linestyle 1\n");
 
+            // Plot actual performance data points
             for (int i = 0; i < n; i++) {
                 fprintf(gnuplotPipe, "%s %f\n", dates[i], times[i]);
             }
             fprintf(gnuplotPipe, "e\n");
 
+            // Plot the regression line
             for (int i = 0; i < n; i++) {
                 float predicted = slope * i + intercept;
                 fprintf(gnuplotPipe, "%s %f\n", dates[i], predicted);
@@ -233,6 +392,7 @@ void athlete_progress_linear(const Athlete *athlete, const char *event) { // Per
             printf("Plot saved as '%s'.\n", output_file);
         }
 
+        // Free allocated memory
         for (int i = 0; i < n; i++) {
             free(dates[i]);
         }
@@ -244,29 +404,68 @@ void athlete_progress_linear(const Athlete *athlete, const char *event) { // Per
     free(dates);
 }
 
-void athlete_progress_dates(const Athlete *athlete, const char *event, const char *date1, const char *date2) { // Calculates and displays an athlete's progress for a specific event between two dates
-    float time1 = -1.0;
-    float time2 = -1.0;
+/**
+ * read_performances - Reads performance data for a specific athlete from a file.
+ *
+ * This function reads the performance data of a given athlete from their file in the DATA_DIR directory.
+ * The data is stored in the athlete's performance array. If the file does not exist, an error message is printed.
+ * The performances are dynamically allocated and resized as needed. After reading, the performances are sorted by date.
+ */
+void read_performances(const char* athlete_name, Athlete *athlete) {
+    char file_path[256]; // Buffer to hold the file path
 
-    for (int i = 0; i < athlete->count; i++) {
-        if (strcmp(athlete->performances[i].event, event) == 0) {
-            if (strcmp(athlete->performances[i].date, date1) == 0) {
-                time1 = atof(athlete->performances[i].time);
-            }
-            if (strcmp(athlete->performances[i].date, date2) == 0) {
-                time2 = atof(athlete->performances[i].time);
-            }
+    // Create the file path in the format "DATA_DIR/athlete_name.txt"
+    snprintf(file_path, sizeof(file_path), "%s/%s.txt", DATA_DIR, athlete_name);
+
+    // Open the file for reading
+    FILE *file = fopen(file_path, "r");
+    if (file == NULL) {
+        // If the file cannot be opened, print an error message
+        fprintf(stderr, "No file found for athlete %s\n", athlete_name);
+        return;
+    }
+
+    char line[MAX_LINE_LENGTH]; // Buffer to hold each line of the file
+    athlete->count = 0; // Initialize the count of performances
+    athlete->capacity = INITIAL_PERFORMANCES; // Initialize the capacity of the performance array
+    athlete->performances = (Performance *)malloc(athlete->capacity * sizeof(Performance)); // Allocate memory for performances
+
+    // Read each line from the file
+    while (fgets(line, sizeof(line), file)) {
+        // If the performance array is full, double its capacity
+        if (athlete->count >= athlete->capacity) {
+            athlete->capacity *= 2;
+            athlete->performances = (Performance *)realloc(athlete->performances, athlete->capacity * sizeof(Performance));
+        }
+
+        // Tokenize the line to extract date, event, time, and position
+        char *date = strtok(line, ";");
+        char *event = strtok(NULL, ";");
+        char *time = strtok(NULL, ";");
+        char *position = strtok(NULL, "\n");
+
+        // If date, event, and time are present, store the performance data
+        if (date && event && time) {
+            strcpy(athlete->performances[athlete->count].date, date);
+            strcpy(athlete->performances[athlete->count].event, event);
+            strcpy(athlete->performances[athlete->count].time, time);
+            athlete->performances[athlete->count].position = position ? atoi(position) : 0; // Convert position to integer if present
+            athlete->count++; // Increment the count of performances
         }
     }
 
-    if (time1 >= 0 && time2 >= 0) {
-        printf("Athlete's progress for event %s between %s and %s: %.2f\n", event, date1, date2, time2 - time1);
-    } else {
-        printf("Times not found for one of the specified dates.\n");
-    }
+    // Close the file after reading all data
+    fclose(file);
+
+    // Set the athlete's name
+    strcpy(athlete->name, athlete_name);
+
+    // Sort performances by date using qsort and compare_dates function
+    qsort(athlete->performances, athlete->count, sizeof(Performance), compare_dates);
 }
 
-int is_valid_date(const char *date) { // Checks if the given date string is valid
+
+int is_valid_date(const char *date) { // check date has the right format
     if (strlen(date) != 10) return 0;
     if (date[4] != '-' || date[7] != '-') return 0;
     for (int i = 0; i < 10; i++) {
@@ -291,7 +490,7 @@ int is_valid_date(const char *date) { // Checks if the given date string is vali
     }
 
     if (day < 1 || day > max_days_in_month) return 0;
-
+    
     return 1;
 }
 
@@ -374,11 +573,6 @@ void prompt_position(int *position) { // Prompts the user to enter a position an
     }
 }
 
-typedef struct { // Structure to hold athlete performance data
-    char name[50];
-    float time;
-} AthletePerformance;
-
 int compare_performance(const void *a, const void *b) { // Comparison function for sorting performances by time
     AthletePerformance *ap1 = (AthletePerformance *)a;
     AthletePerformance *ap2 = (AthletePerformance *)b;
@@ -387,63 +581,81 @@ int compare_performance(const void *a, const void *b) { // Comparison function f
     return 0;
 }
 
-void find_top_athletes(const char *event) { // Finds and displays the top 3 athletes for a specific event
-    DIR *dir;
-    struct dirent *entry;
-    AthletePerformance *all_performances = NULL;
-    int total_performances = 0;
+/**
+ * athlete_progress_dates - Calculates the progress of an athlete between two dates for a specific event.
+ *
+ * This function finds the performance times of an athlete for a specified event on two given dates.
+ * It then calculates and prints the difference in performance times between the two dates.
+ * If the times for one or both dates are not found, an appropriate message is printed.
+ */
+void athlete_progress_dates(const Athlete *athlete, const char *event, const char *date1, const char *date2) {
+    float time1 = -1.0; // Initialize time1 to -1.0 to indicate not found
+    float time2 = -1.0; // Initialize time2 to -1.0 to indicate not found
 
-    if ((dir = opendir(DATA_DIR)) == NULL) {
-        perror("opendir");
-        return;
-    }
-
-    while ((entry = readdir(dir)) != NULL) {
-        if (entry->d_type == DT_REG) {
-            Athlete athlete;
-            char athlete_name[50];
-            strncpy(athlete_name, entry->d_name, sizeof(athlete_name));
-            athlete_name[strcspn(athlete_name, ".")] = '\0'; // Remove the file extension
-            read_performances(athlete_name, &athlete);
-
-            for (int i = 0; i < athlete.count; i++) {
-                if (strcmp(athlete.performances[i].event, event) == 0) {
-                    total_performances++;
-                    all_performances = realloc(all_performances, total_performances * sizeof(AthletePerformance));
-                    strncpy(all_performances[total_performances - 1].name, athlete.name, sizeof(all_performances[total_performances - 1].name));
-                    all_performances[total_performances - 1].time = atof(athlete.performances[i].time);
-                }
-            }
-
-            // Free allocated memory for the athlete's performances
-            free(athlete.performances);
-        }
-    }
-    closedir(dir);
-
-    if (total_performances > 0) {
-        qsort(all_performances, total_performances, sizeof(AthletePerformance), compare_performance);
-
-        int num_athletes = total_performances < 3 ? total_performances : 3;
-        printf("Top %d athletes for event %s:\n", num_athletes, event);
-        for (int i = 0; i < num_athletes; i++) {
-            printf("%d. %s - Time: %.2f\n", i + 1, all_performances[i].name, all_performances[i].time);
-        }
-
-        if (num_athletes == 3) {
-            printf("Congratulations to %s, %s, and %s! You are going to the Olympics!\n",
-                all_performances[0].name, all_performances[1].name, all_performances[2].name);
-        } else if (num_athletes == 2) {
-            printf("Congratulations to %s and %s! You are going to the Olympics!\n",
-                all_performances[0].name, all_performances[1].name);
-        } else if (num_athletes == 1) {
-            printf("Congratulations to %s! You are going to the Olympics!\n",
-                all_performances[0].name);
-        }
-
-        // Free allocated memory for the performances
-        free(all_performances);
+    // Ensure date1 is earlier than date2
+    char date_earlier[11], date_later[11];
+    if (strcmp(date1, date2) <= 0) {
+        strcpy(date_earlier, date1);
+        strcpy(date_later, date2);
     } else {
-        printf("No athletes found for event %s\n", event);
+        strcpy(date_earlier, date2);
+        strcpy(date_later, date1);
     }
+
+    // Loop through performances to find the times for the given dates
+    for (int i = 0; i < athlete->count; i++) {
+        if (strcmp(athlete->performances[i].event, event) == 0) {
+            if (strcmp(athlete->performances[i].date, date_earlier) == 0) {
+                time1 = atof(athlete->performances[i].time); // Convert time string to float
+            }
+            if (strcmp(athlete->performances[i].date, date_later) == 0) {
+                time2 = atof(athlete->performances[i].time); // Convert time string to float
+            }
+        }
+    }
+
+    // Print the progress if both times are found
+    if (time1 >= 0 && time2 >= 0) {
+        printf("Athlete's progress for event %s between %s and %s: %.2f\n", event, date_earlier, date_later, time2 - time1);
+    } else {
+        printf("Times not found for one of the specified dates.\n");
+    }
+}
+
+/**
+ * is_valid_date - Validates if a given date string is in the format YYYY-MM-DD.
+ *
+ * This function checks if a date string is valid by ensuring it follows the format YYYY-MM-DD.
+ * It also checks for valid year, month, and day ranges, including leap year handling for February.
+ */
+int is_valid_date(const char *date) {
+    if (strlen(date) != 10) return 0; // Check if the length of the date string is 10
+    if (date[4] != '-' || date[7] != '-') return 0; // Check if the 5th and 8th characters are '-'
+
+    // Check if all other characters are digits
+    for (int i = 0; i < 10; i++) {
+        if (i == 4 || i == 7) continue; // Skip the '-' characters
+        if (!isdigit(date[i])) return 0; // Ensure the character is a digit
+    }
+
+    int year, month, day;
+    sscanf(date, "%d-%d-%d", &year, &month, &day); // Parse the date string into year, month, and day
+
+    if (month < 1 || month > 12) return 0; // Check for valid month
+
+    int max_days_in_month = 31;
+    // Determine the maximum number of days in the month
+    if (month == 4 || month == 6 || month == 9 || month == 11) {
+        max_days_in_month = 30;
+    } else if (month == 2) {
+        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+            max_days_in_month = 29; // Leap year
+        } else {
+            max_days_in_month = 28;
+        }
+    }
+
+    if (day < 1 || day > max_days_in_month) return 0; // Check for valid day
+
+    return 1; // The date is valid
 }
