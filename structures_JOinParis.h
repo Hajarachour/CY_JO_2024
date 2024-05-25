@@ -15,4 +15,9 @@ typedef struct {
     int capacity;
 } Athlete;
 
+typedef struct { // Structure to hold athlete performance data
+    char name[50];
+    float time;
+} AthletePerformance;
+
 #endif
