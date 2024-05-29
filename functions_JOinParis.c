@@ -210,10 +210,10 @@ void create_initial_athletes() { // Create initial data for a set of athletes
     add_performance("Simon", "2024-05-25", "100m", "12.4", 0);
 
     create_athlete_file("Alain");
-    add_performance("Simon", "2023-01-10", "100m", "10.5", 0);
-    add_performance("Simon", "2023-01-10", "400m", "42.5", 0);
-    add_performance("Simon", "2023-01-10", "4x400m", "165", 2);
-    add_performance("Simon", "2023-01-10", "marathon", "7300", 0);
+    add_performance("Alain", "2023-01-10", "100m", "10.5", 0);
+    add_performance("Alain", "2023-01-10", "400m", "42.5", 0);
+    add_performance("Alain", "2023-01-10", "4x400m", "165", 2);
+    add_performance("Alain", "2023-01-10", "marathon", "7300", 0);
 
     printf("Initial athletes created and performances added.\n");
 }
