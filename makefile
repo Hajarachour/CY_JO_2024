@@ -1,48 +1,40 @@
-# Compiler
+# Define the compiler
 CC = gcc
 
-# Compiler flags
-CFLAGS = -Wall -Wextra -std=c11
+# Define compiler flags
+CFLAGS = -Wall -Wextra -Werror
 
-# Directories
-SRC_DIR = .
-OBJ_DIR = obj
-BIN_DIR = bin
+# Define the target executable
+TARGET = main
 
-# Source files
-SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
+# Define the source files
+SRCS = main_JOinParis.c functions_JOinParis.c imports_and_variables_JOinParis.c
 
-# Object files
-OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
-
-# Executable
-TARGET = $(BIN_DIR)/main
+# Define the object files
+OBJS = $(SRCS:.c=.o)
 
 # Default target
 all: $(TARGET)
 
-# Link the object files to create the executable
-$(TARGET): $(OBJ_FILES) | $(BIN_DIR)
-	$(CC) $(OBJ_FILES) -o $(TARGET)
+# Target to install necessary packages
+install:
+	sudo apt-get update
+	sudo apt-get install -y build-essential gnuplot
 
-# Compile source files into object files
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+# Rule to link object files and create the executable
+$(TARGET): $(OBJS)
+	$(CC) -o $@ $(OBJS)
+
+# Rule to compile source files into object files
+%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Create directories if they do not exist
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
-
-$(BIN_DIR):
-	mkdir -p $(BIN_DIR)
-
-# Clean up build artifacts
-clean:
-	rm -rf $(OBJ_DIR) $(BIN_DIR)
-
-# Run the program
+# Rule to run the program
 run: $(TARGET)
 	./$(TARGET)
 
-# Phony targets
-.PHONY: all clean run
+# Rule to clean up generated files
+clean:
+	rm -f $(TARGET) $(OBJS)
+
+.PHONY: all install run clean
