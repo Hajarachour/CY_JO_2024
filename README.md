@@ -14,8 +14,8 @@ Le projet JOinParis est une application en C conçue pour aider à suivre et gé
 Avant d'exécuter le programme, vous devez installer certains packages essentiels sur votre système. Utilisez les commandes suivantes dans le terminal :
 
 ```bash
-sudo apt-get update
-sudo apt-get install -y build-essential gnuplot
+sudo DEBIAN_FRONTEND=noninteractive apt-get update
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential gnuplot
 ```
 
 ### Compilation et Exécution
