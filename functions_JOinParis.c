@@ -103,7 +103,7 @@ void create_initial_athletes() { // Create initial data for a set of athletes
     add_performance("Robin", "2023-04-10", "marathon", "8100", 0);
     add_performance("Robin", "2023-06-10", "marathon", "8000", 0);
     add_performance("Robin", "2023-08-10", "marathon", "7900", 0);
-    add_performance("Robin", "2023-10-10", "marathon", "7800", 0);
+    add_performance("Robin", "2023-10-10", "marathon", "7100", 0);
 
     create_athlete_file("Dimittri");
     add_performance("Dimittri", "2023-01-15", "100m", "12.5", 0);
@@ -132,7 +132,7 @@ void create_initial_athletes() { // Create initial data for a set of athletes
     add_performance("Raphael", "2023-04-20", "marathon", "8700", 0);
     add_performance("Raphael", "2023-06-20", "marathon", "8600", 0);
     add_performance("Raphael", "2023-08-20", "marathon", "7900", 0);
-    add_performance("Raphael", "2023-10-20", "marathon", "7400", 0);
+    add_performance("Raphael", "2023-10-20", "marathon", "7150", 0);
     add_performance("Raphael", "2023-11-20", "4x400m", "185", 1);
     add_performance("Raphael", "2024-01-20", "4x400m", "180", 1);
     add_performance("Raphael", "2024-03-20", "4x400m", "175", 1);
