@@ -144,7 +144,7 @@ void create_initial_athletes() { // Create initial data for a set of athletes
     add_performance("Hamed", "2023-03-25", "100m", "13.5", 0);
     add_performance("Hamed", "2023-05-25", "100m", "13.3", 0);
     add_performance("Hamed", "2023-07-25", "100m", "13.0", 0);
-    add_performance("Hamed", "2023-09-25", "100m", "12.8", 0);
+    add_performance("Hamed", "2023-09-25", "100m", "11.8", 0);
     add_performance("Hamed", "2023-02-25", "400m", "52.0", 0);
     add_performance("Hamed", "2023-04-25", "400m", "51.0", 0);
     add_performance("Hamed", "2023-06-25", "400m", "50.0", 0);
